@@ -1,0 +1,19 @@
+{
+  "name": "nodejstraininginexpree",
+  "version": "1.0.0",
+  "description": "Nodejs Training",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Swarnali-Ghosh/NodejsTrainingInExpree.git"
+  },
+  "author": "Swarnali Ghosh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Swarnali-Ghosh/NodejsTrainingInExpree/issues"
+  },
+  "homepage": "https://github.com/Swarnali-Ghosh/NodejsTrainingInExpree#readme"
+}

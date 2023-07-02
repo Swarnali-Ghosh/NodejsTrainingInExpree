@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Swarnali-Ghosh/NodejsTrainingInExpree/issues"
   },
-  "homepage": "https://github.com/Swarnali-Ghosh/NodejsTrainingInExpree#readme"
+  "homepage": "https://github.com/Swarnali-Ghosh/NodejsTrainingInExpree#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }

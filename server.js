@@ -1,26 +1,13 @@
+// in this page we will have only middleware and code to run server
 const express = require('express');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv')
 const bodyParser = require('body-parser');
 const userModel = require("./model/userSchema");
-
+const userRoute = require("./route/userRoute")
 const app = express()
-dotenv.config()
+const port = 8001;
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
-
-mongoose.connect(MONGOURL
-    ,
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    }
-);
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error: "));
-db.once("open", function () {
-    console.log("Connected successfully");
-});
+app.use("/user", userRoute)
 
 app.post("/add_user", async (request, response) => {
 

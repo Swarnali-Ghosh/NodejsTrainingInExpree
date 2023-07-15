@@ -11,6 +11,8 @@ router.use((req, res, next) => {
     next()
 })
 
-router.post("/addUser", function (req, res) {
-    userController.saveUser(req, res);
+router.get("/", function (req, res) {
+    res.send("hello world")
 })
+
+module.exports = router;

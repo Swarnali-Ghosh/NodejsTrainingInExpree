@@ -1,28 +1,110 @@
-const express = require('express')
-const mongoose = require('mongoose')
+const express = require('express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv')
+const bodyParser = require('body-parser');
+const userModel = require("./model/userSchema");
+
 const app = express()
-const port = 4000
+dotenv.config()
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
 
-const mongoUrl = 'mongodb://my_self:self123@ac-cj2p4xr-shard-00-00.piiwspq.mongodb.net:27017,ac-cj2p4xr-shard-00-01.piiwspq.mongodb.net:27017,ac-cj2p4xr-shard-00-02.piiwspq.mongodb.net:27017/?ssl=true&replicaSet=atlas-1121jz-shard-0&authSource=admin&retryWrites=true&w=majority'
-mongoose.connect(mongoUrl)
-    .then(() => console.log('Connected!'))
-    .catch((error) => {
-        console.log(error)
+mongoose.connect(MONGOURL
+    ,
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    }
+);
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error: "));
+db.once("open", function () {
+    console.log("Connected successfully");
+});
+
+app.post("/add_user", async (request, response) => {
+
+    let insertData = {
+        "name": request.body.name,
+        "age": request.body.age
+    };
+    const user = new userModel(insertData);
+    console.log("app hit");
+    try {
+        await user.save(); // save data inside users table 
+        response.send(user); //sending user json as response to client
+    } catch (error) {
+        response.status(500).send(error);
+    }
+});
+
+/*
+async- await
+promise
+callback
+*/
+/* API to add new user in MongoDB */
+app.post("/add_user", async (request, response) => {
+
+    let insertData = {
+        "name": request.body.name,
+        "age": request.body.age
+    };
+    console.log(insertData)
+    const user = new userModel(insertData);
+    console.log("app hit");
+    try {
+        await user.save(); // save data inside users table 
+        response.send(user); //sending user json as response to client
+    } catch (error) {
+        response.status(500).send(error);
+    }
+});
+// /* API to get all user from MongoDB */
+app.get("/users", (request, response) => {
+    userModel.find({}).then((list) => {
+        response.send(list);
+    }).catch((err) => {
+        response.status(500).send(err);
     })
+});
+/* API to get particular user in MongoDB */
+app.get('/user/:userId', function (req, res) {
+    userModel.find({ "_id": req.params.userId }).then((list) => {
+        res.send(list);
+    }).catch((err) => {
+        res.send(err);
+    })
+})
+// /* API to Update particular user Details in MongoDB */
+app.put('/updateUser/:id', (req, res) => {
+    console.log("Id to update:::::", req.params.id)
+    const taskToUpdate = req.body;
+    userModel.findOneAndUpdate({ "_id": req.params.id }, taskToUpdate)
+        .then((user) => {
+            res.send("User Updated Successfully");
+        }).catch((err) => {
+            res.send(err);
+        })
+})
+// /* API to Hard delete particular user Details in MongoDB */
+app.delete('/deleteUser/:userId', function (req, res) {
+    userModel.deleteOne({ "_id": req.params.userId })
+        .then((user) => {
+            res.send(user);
+        }).catch((err) => {
+            res.send(err);
+        })
+})
 
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
-app.post('/post', (req, res) => {
-    res.send("this is our post method")
-})
-app.put('/put', (req, res) => {
-    res.send("this is our put method")
-})
-app.delete('/delete', (req, res) => {
-    res.send("this is our delete method")
-})
+async function insert() {
+    await userModel.create({
+        name: 'Swarnali Ghosh',
+        age: 35
+    })
+}
 
+// insert();
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)

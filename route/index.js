@@ -10,7 +10,6 @@ router.use((req, res, next) => {
     // anythink
     next()
 })
-
 router.post("/addUser", function (req, res) {
     userController.saveUser(req, res);
 })
